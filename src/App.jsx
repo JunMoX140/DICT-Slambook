@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function MyForm() {
+  function handleSubmit(e) {
+    // Prevent the browser from reloading the page
+    e.preventDefault();
+
+    // Read the form data
+    const form = e.target;
+    const formData = new FormData(form);
+
+    // You can pass formData as a fetch body directly:
+    fetch("/some-api", { method: form.method, body: formData });
+
+    // Or you can work with it as a plain object:
+    const formJson = Object.fromEntries(formData.entries());
+    console.log(formJson);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+    <form method="post" onSubmit={handleSubmit}>
+      <label>
+        Text input: <input name="myInput" defaultValue="Some initial value" />
+      </label>
+      <hr />
+      <label>
+        Checkbox:{" "}
+        <input type="checkbox" name="myCheckbox" defaultChecked={true} />
+      </label>
+      <hr />
+      <p>
+        Radio buttons:
+        <label>
+          <input type="radio" name="myRadio" value="option1" /> Option 1
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="myRadio"
+            value="option2"
+            defaultChecked={true}
+          />{" "}
+          Option 2
+        </label>
+        <label>
+          <input type="radio" name="myRadio" value="option3" /> Option 3
+        </label>
       </p>
-    </>
-  )
+      <hr />
+      <button type="reset">Reset form</button>
+      <button type="submit">Submit form</button>
+    </form>
+  );
 }
-
-export default App
